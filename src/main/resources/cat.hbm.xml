@@ -8,7 +8,7 @@
         <id name="id" type="int" column="id">
             <generator class="identity"/>
         </id>
-        <property name="name" column="name"/>
+        <property name="name" column="name" unique="true"/>
         <property name="color" column="color"/>
         <property name="age" column="age"/>
     </class>

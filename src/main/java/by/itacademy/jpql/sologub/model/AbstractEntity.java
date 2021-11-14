@@ -12,16 +12,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString
 @With
-public class Cat extends AbstractEntity implements Serializable {
-    private String name;
-    private String color;
-    private int age;
-
-    @Override
-    public AbstractEntity withId(int id) {
-        return null;
-    }
+public abstract class AbstractEntity implements Serializable {
+    private int id;
 }

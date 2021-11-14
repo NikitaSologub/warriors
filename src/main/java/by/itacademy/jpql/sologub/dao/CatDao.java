@@ -1,15 +1,20 @@
 package by.itacademy.jpql.sologub.dao;
 
+import by.itacademy.jpql.sologub.exception.CatException;
 import by.itacademy.jpql.sologub.model.Cat;
 
+import java.util.List;
+
 public interface CatDao {
-    Cat getAll();
+    List<Cat> getAll();
 
-    Cat get(int id);
+    Cat get(int id) throws CatException;
 
-    Cat input(Cat cat);
+    Cat get(String name) throws CatException;
 
-    Cat change(Cat cat);
+    boolean input(Cat cat);
 
-    Cat delete(Cat cat);
+    boolean change(Cat cat);
+
+    boolean remove(Cat cat);
 }
