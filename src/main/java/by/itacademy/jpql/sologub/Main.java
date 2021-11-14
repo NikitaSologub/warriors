@@ -1,51 +1,63 @@
 package by.itacademy.jpql.sologub;
 
+import by.itacademy.jpql.sologub.dao.CarDao;
+import by.itacademy.jpql.sologub.dao.CarDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.CatDao;
 import by.itacademy.jpql.sologub.dao.CatDaoJpaImpl;
+import by.itacademy.jpql.sologub.exception.CarException;
 import by.itacademy.jpql.sologub.exception.CatException;
+import by.itacademy.jpql.sologub.model.Car;
 import by.itacademy.jpql.sologub.model.Cat;
+import by.itacademy.jpql.sologub.model.Engine;
 
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws CatException {
-//        catsExample();
+    public static void main(String[] args) throws CatException, CarException {
+        catsExample();
+        carAndEngineExample();
+    }
 
+    private static void carAndEngineExample() throws CarException {
+        //Примеры по CRUD all операций через объект CarDao (на связке из Car и Engine)
+        //Car и Engine one-to-one (отображение через car.hbn.xml и engine.hbn.xml)
+        CarDao carDao = CarDaoJpaImpl.getInstance();
 
-//                          Пример по добавлению обьекта Feeder в бд
-//        EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
-//        EntityTransaction transaction = manager.getTransaction();
-//        transaction.begin();
-//        Feeder f = new Feeder()
-//                .withName("Алёшка")
-//                .withFood("черемша")
-//                .withCar(new Car()
-//                        .withModel("Bugatti")
-//                        .withSpeed(135));
-////        f.getCar().setOwner(f);
-//        manager.persist(f);
-//        transaction.commit();
-//        manager.close();
+        List<Car> cars = carDao.getAll();//Пример по извлечению Car из бд
+        cars.forEach(System.out::println);
 
-//                          Пример по извлечению обьектов Feeder из бд
-//        for (int id = 1; id < 6; id++) {
-//            EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
-//            EntityTransaction transaction = manager.getTransaction();
-//            transaction.begin();
-//            System.out.println("Кормитель " + manager.find(Feeder.class, id));
-//            transaction.commit();
-//            manager.close();
-//        }
+        System.out.println(carDao.get(1));//Пример по извлечению Car из бд (с примапленными Engine)
+        System.out.println(carDao.get("Ferrary"));
+        System.out.println(carDao.get(1000));//такого нет в бд - придет null
+        System.out.println(carDao.get("нету"));//такого нет в бд - придет null
 
-//                          Пример по извлечению обьектов Car из бд
-//        for (int id = 1; id < 6; id++) {
-//            EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
-//            EntityTransaction transaction = manager.getTransaction();
-//            transaction.begin();
-//            System.out.println("Машина " + manager.find(Car.class, id));
-//            transaction.commit();
-//            manager.close();
-//        }
+        System.out.println(carDao.get("reno"));// такого ещё нет в бд - придет null
+        Car carToInput = new Car() //Пример по добавлению обьекта Car в бд
+                .withEngine(new Engine()
+                        .withModel("v6_diesel")
+                        .withPower(115))
+                .withFirm("Volvo")
+                .withSpeed(130);
+        carDao.input(carToInput);
+        System.out.println(carDao.get("Volvo"));// проверка, должен вернуть объект из бд
+
+        Car carToChange = carDao.get("reno"); //Пример по изменению обьекта Car в бд
+        System.out.println(carToChange); // перед изменением
+        carToChange.setSpeed(144);
+        Engine engineToChange = carToChange.getEngine();
+        engineToChange.setPower(166);
+        carDao.change(carToChange);
+        System.out.println(carDao.get("reno")); // после изменения
+
+        Car carToRemove = new Car()//Пример по удалению обьекта Car в бд
+                .withEngine(new Engine()
+                        .withModel("v64_turbo+")
+                        .withPower(170))
+                .withFirm("Toyota")
+                .withSpeed(140);
+        System.out.println("Результат удаления того, чего нет в базе " + carDao.remove(carToRemove));// будет false
+        Car carFromDbToRemove = carDao.get(2);
+        System.out.println("Результат удаления обьекта в базе " + carDao.remove(carFromDbToRemove));// будет true
     }
 
     private static void catsExample() throws CatException {
