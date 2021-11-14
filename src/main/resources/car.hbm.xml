@@ -8,7 +8,9 @@
         <id name="id" type="int" column="id">
             <generator class="identity"/>
         </id>
-        <property name="model" column="model"/>
+        <property name="firm" column="firm"/>
         <property name="speed" column="speed"/>
+
+        <one-to-one name="engine" class="by.itacademy.jpql.sologub.model.Engine" cascade="all"/>
     </class>
 </hibernate-mapping>

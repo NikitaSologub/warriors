@@ -20,6 +20,6 @@
 
         <mapping resource="cat.hbm.xml"/>
         <mapping resource="car.hbm.xml"/>
-        <mapping resource="feeder.hbm.xml"/>
+        <mapping resource="engine.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

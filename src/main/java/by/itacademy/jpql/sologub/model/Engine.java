@@ -13,12 +13,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString
+@ToString(exclude = "car")
 @With
-public class Car extends AbstractEntity implements Serializable {
-    private String firm;
-    private int speed;
-    private Engine engine;
+public class Engine extends AbstractEntity implements Serializable {
+    private String model;
+    private int power;
+    private Car car;
 
     @Override
     public AbstractEntity withId(int id) {
