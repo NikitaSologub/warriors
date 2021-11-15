@@ -21,5 +21,13 @@
         <mapping resource="cat.hbm.xml"/>
         <mapping resource="car.hbm.xml"/>
         <mapping resource="engine.hbm.xml"/>
+
+        <mapping class="by.itacademy.jpql.sologub.model.MilitaryRank"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WeaponManufacturer"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WeaponType"/>
+        <mapping class="by.itacademy.jpql.sologub.model.MilitaryFormation"/>
+        <mapping class="by.itacademy.jpql.sologub.model.Weapon"/>
+        <mapping class="by.itacademy.jpql.sologub.model.Warrior"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WarriorInfo"/>
     </session-factory>
 </hibernate-configuration>
