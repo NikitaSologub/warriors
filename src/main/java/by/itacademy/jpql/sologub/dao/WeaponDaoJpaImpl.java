@@ -45,7 +45,7 @@ public class WeaponDaoJpaImpl extends AbstractDaoJpa<Weapon> implements WeaponDa
         EntityTransaction transaction = manager.getTransaction();
         try {
             transaction.begin();
-            @SuppressWarnings("JpaQlInspection")//todo - возможно пофиксить
+            @SuppressWarnings("JpaQlInspection")
             TypedQuery<Weapon> typedQuery = manager.createQuery("select c from Weapon c where serialNumber=?1", Weapon.class);
             typedQuery.setParameter(1, serialNumber);
             result = typedQuery.getSingleResult();
