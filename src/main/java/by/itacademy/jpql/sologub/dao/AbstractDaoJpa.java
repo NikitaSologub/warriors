@@ -32,6 +32,7 @@ public abstract class AbstractDaoJpa<T extends AbstractEntity> {
             transaction.commit();
         } catch (PersistenceException e) {
 //            System.err.println("Не удалось достать" + objClass.getSimpleName() + " из бд по id=" + id);
+            throw e;
         } finally {
             manager.close();
         }
@@ -52,6 +53,7 @@ public abstract class AbstractDaoJpa<T extends AbstractEntity> {
         } catch (PersistenceException e) {
 //            System.err.println("Не получилось добавить " + obj + ". Он имеет поля, которые уже есть у объекта в БД");
             transaction.rollback();
+            throw e;
         } finally {
             manager.close();
         }
@@ -72,7 +74,7 @@ public abstract class AbstractDaoJpa<T extends AbstractEntity> {
         } catch (PersistenceException e) {
 //            System.err.println("Не получилось изменить" + obj + "Он имеет поля, которые уже есть у объекта в БД");
             transaction.rollback();
-            manager.close();
+            throw e;
         } finally {
             manager.close();
         }
@@ -93,7 +95,7 @@ public abstract class AbstractDaoJpa<T extends AbstractEntity> {
         } catch (PersistenceException e) {
 //            System.err.println("Не получилось удалить " + obj + " в БД");
             transaction.rollback();
-            manager.close();
+            throw e;
         } finally {
             manager.close();
         }
