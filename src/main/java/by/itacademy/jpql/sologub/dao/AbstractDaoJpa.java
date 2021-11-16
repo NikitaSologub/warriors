@@ -4,35 +4,21 @@ import by.itacademy.jpql.sologub.model.AbstractEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractDaoJpa<T extends AbstractEntity> {
     private final Class<T> objClass;
 
-    public AbstractDaoJpa(Class<T> objClass) {
+    protected AbstractDaoJpa(Class<T> objClass) {
         this.objClass = objClass;
     }
 
-    protected List<T> getAll(TypedQuery<T> getAllQuery) {
+    protected List<T> getAll() {
         EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
-        EntityTransaction transaction = manager.getTransaction();
-        transaction.begin();
-        List<T> objectsList;
-        try {
-            objectsList = getAllQuery.getResultList();
-            System.err.println("List<" + objClass.getSimpleName() + "> извлечён из бд");
-            transaction.commit();
-        } catch (NoResultException e) {
-            System.err.println("Не удалось достать List<" + objClass.getSimpleName() + "> из бд");
-            objectsList = new ArrayList<>();
-        } finally {
-            manager.close();
-        }
-        return objectsList;
+        TypedQuery<T> query = manager.createQuery("from " + objClass.getName(), objClass);
+        return query.getResultList();
     }
 
     protected T get(int id) {
