@@ -5,6 +5,8 @@ import by.itacademy.jpql.sologub.dao.CarDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.CatDao;
 import by.itacademy.jpql.sologub.dao.CatDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.EntityManagerHelper;
+import by.itacademy.jpql.sologub.dao.WeaponDao;
+import by.itacademy.jpql.sologub.dao.WeaponDaoJpaImpl;
 import by.itacademy.jpql.sologub.exception.CarException;
 import by.itacademy.jpql.sologub.exception.CatException;
 import by.itacademy.jpql.sologub.model.Car;
@@ -33,7 +35,45 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) throws CatException, CarException {
 //        xmlMappingOnlyExamples();
-//        warriors();
+        xmlAndAnnotationMappingExamples();
+    }
+
+    public static void xmlAndAnnotationMappingExamples() {
+//        weapons();
+        warriors();
+    }
+
+    public static void weapons() {
+        WeaponDao weaponDao = WeaponDaoJpaImpl.getInstance();
+
+        List<Weapon> weapons = weaponDao.getAll();
+        weapons.forEach(System.out::println);
+
+        System.out.println(weaponDao.get(1));
+        System.out.println(weaponDao.get(100));//null expected
+        System.out.println(weaponDao.get("sTR809_12093"));
+        System.out.println(weaponDao.get("нет такго серийного номера"));//null expected
+
+        Weapon w1 = weaponDao.get(1);
+        w1.setType(WeaponType.AUTOMATIC_RIFLE);
+        weaponDao.change(w1);
+
+        Weapon w2 = new Weapon()
+                .withType(WeaponType.GRENADE_LAUNCHER)
+                .withManufacturer(WeaponManufacturer.STURM_RUGER_AND_CO_INC)
+                .withSerialNumber("throw some numbers");
+        System.out.println(weaponDao.get("throw some numbers"));//null expected
+        weaponDao.input(w2);
+        System.out.println(weaponDao.get("throw some numbers"));//object expected
+
+        Weapon w3 = new Weapon()
+                .withType(WeaponType.GUN)
+                .withManufacturer(WeaponManufacturer.GENERAL_DYNAMICS_CORPORATION)
+                .withSerialNumber("weapon to delete");
+        weaponDao.input(w3);
+        w3 = weaponDao.get("weapon to delete");//object expected
+        System.out.println(w3);
+        weaponDao.remove(w3);
     }
 
     private static void warriors() {
