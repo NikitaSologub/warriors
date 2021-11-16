@@ -8,22 +8,24 @@ import lombok.With;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @With
 @Entity
-@Table(name ="military_formation" )
-public class MilitaryFormation extends AbstractEntity{
+@Table(name = "military_formation")
+public class MilitaryFormation extends AbstractEntity {
     @Column(name = "title")
     @NotNull
     private String title;
-//    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH,CascadeType.REMOVE})
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.EAGER)
     private Set<Warrior> warriors;
 
     @Override
