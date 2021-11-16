@@ -5,6 +5,8 @@ import by.itacademy.jpql.sologub.dao.CarDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.CatDao;
 import by.itacademy.jpql.sologub.dao.CatDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.EntityManagerHelper;
+import by.itacademy.jpql.sologub.dao.MilitaryFormationDao;
+import by.itacademy.jpql.sologub.dao.MilitaryFormationJpaImpl;
 import by.itacademy.jpql.sologub.dao.WarriorDao;
 import by.itacademy.jpql.sologub.dao.WarriorDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.WeaponDao;
@@ -43,7 +45,7 @@ public class Main {
     public static void xmlAndAnnotationMappingExamples() {
 //        weapons();
 //        warriors();
-        groups();
+//        groups();
     }
 
     public static void weapons() {
@@ -117,8 +119,77 @@ public class Main {
         System.out.println(warriorDao.get(20));// null expected
     }
 
-    private static void groups(){
+    private static void groups() {
+        MilitaryFormationDao formationDao = MilitaryFormationJpaImpl.getInstance();
 
+        List<MilitaryFormation> formations = formationDao.getAll();
+        formations.forEach(System.out::println);
+
+
+        System.out.println(formationDao.get(13));//object expected
+        System.out.println(formationDao.get(1000));//null expected
+        System.out.println(formationDao.get("36 Дорожно-мостовая бригада"));//object expected
+        System.out.println(formationDao.get("нет такоей группы"));//null expected
+
+
+        System.out.println(formationDao.get("Произвольная группа для добавления"));//null expected
+        formationDao.input(new MilitaryFormation()
+                .withTitle("Произвольная группа для добавления")
+                .withWarriors(formations.get(0).getWarriors()
+                        .stream()
+                        .limit(1)
+                        .collect(Collectors.toSet())));
+        System.out.println(formationDao.get("Произвольная группа для добавления"));//object expected
+
+
+        groupsChanging();//изменения полей группы и ее обьектов
+
+
+        formationDao.input(new MilitaryFormation()
+                .withTitle("Произвольная группа для удаления")
+                .withWarriors(formations.get(0).getWarriors()
+                        .stream()
+                        .skip(2)
+                        .limit(2)
+                        .collect(Collectors.toSet())));
+        MilitaryFormation formationToDelete = formationDao.get("Произвольная группа для удаления");
+        System.out.println(formationToDelete); // object expected
+        formationDao.remove(formationToDelete);
+        System.out.println(formationDao.get("Произвольная группа для удаления"));// null expected
+    }
+
+    private static void groupsChanging(){
+        //Большое тело - вынес отдельно в метод
+        MilitaryFormationDao formationDao = MilitaryFormationJpaImpl.getInstance();
+
+        //Создаем группу с солдатом которую будем изменять
+        MilitaryFormation formationToChange = new MilitaryFormation()
+                .withTitle("Произвольная группа для изменения")
+                .withWarriors(Set.of(new Warrior()
+                        .withInfo(new WarriorInfo()
+                                .withFirstname("Герман")
+                                .withLastname("Стерлингов")
+                                .withAge(28))
+                        .withRank(MilitaryRank.NO_INSIGNIA)
+                        .withWeapon(new Weapon()
+                                .withManufacturer(WeaponManufacturer.THALES_GROUP)
+                                .withType(WeaponType.AUTOMATIC_RIFLE)
+                                .withSerialNumber("38оа923во28TR_OC45445"))));
+
+        //Добавляем ее и сразу же смотрим как она легла в БД
+        formationDao.input(formationToChange);
+        formationToChange = formationDao.get("Произвольная группа для изменения");
+        System.out.println(formationToChange);//object show 1st state
+
+        //Меняем данные созданной группы
+        formationToChange.setTitle("Произвольная группа уже изменена!!!");//меняем поля самой группы
+        Warrior w1 = formationToChange.getWarriors().stream()
+                .findAny().orElseThrow();
+        w1.setRank(MilitaryRank.SERGEANT);//меняем поле объекта в SET группы
+
+        //Изменить состояние и вывести как легли изменения в бд
+        formationDao.change(formationToChange);
+        System.out.println(formationDao.get("Произвольная группа уже изменена!!!"));//object show 2nd state
     }
 
     private static void xmlMappingOnlyExamples() throws CatException, CarException {
