@@ -6,13 +6,11 @@ import by.itacademy.jpql.sologub.dao.CatDao;
 import by.itacademy.jpql.sologub.dao.CatDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.EntityManagerHelper;
 import by.itacademy.jpql.sologub.dao.MilitaryFormationDao;
-import by.itacademy.jpql.sologub.dao.MilitaryFormationJpaImpl;
+import by.itacademy.jpql.sologub.dao.MilitaryFormationDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.WarriorDao;
 import by.itacademy.jpql.sologub.dao.WarriorDaoJpaImpl;
 import by.itacademy.jpql.sologub.dao.WeaponDao;
 import by.itacademy.jpql.sologub.dao.WeaponDaoJpaImpl;
-import by.itacademy.jpql.sologub.exception.CarException;
-import by.itacademy.jpql.sologub.exception.CatException;
 import by.itacademy.jpql.sologub.model.Car;
 import by.itacademy.jpql.sologub.model.Cat;
 import by.itacademy.jpql.sologub.model.Engine;
@@ -28,24 +26,24 @@ import org.hibernate.LazyInitializationException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Main {
-    public static void main(String[] args) throws CatException, CarException {
+    public static void main(String[] args) {
 //        xmlMappingOnlyExamples();
-        xmlAndAnnotationMappingExamples();
+//        xmlAndAnnotationMappingExamples();
+//        namedQueriesExample();
+        criteriaApiExample();
     }
 
     public static void xmlAndAnnotationMappingExamples() {
-//        weapons();
-//        warriors();
-//        groups();
+        weapons();
+        warriors();
+        groups();
     }
 
     public static void weapons() {
@@ -120,7 +118,7 @@ public class Main {
     }
 
     private static void groups() {
-        MilitaryFormationDao formationDao = MilitaryFormationJpaImpl.getInstance();
+        MilitaryFormationDao formationDao = MilitaryFormationDaoJpaImpl.getInstance();
 
         List<MilitaryFormation> formations = formationDao.getAll();
         formations.forEach(System.out::println);
@@ -160,7 +158,7 @@ public class Main {
 
     private static void groupsChanging(){
         //Большое тело - вынес отдельно в метод
-        MilitaryFormationDao formationDao = MilitaryFormationJpaImpl.getInstance();
+        MilitaryFormationDao formationDao = MilitaryFormationDaoJpaImpl.getInstance();
 
         //Создаем группу с солдатом которую будем изменять
         MilitaryFormation formationToChange = new MilitaryFormation()
@@ -192,7 +190,7 @@ public class Main {
         System.out.println(formationDao.get("Произвольная группа уже изменена!!!"));//object show 2nd state
     }
 
-    private static void xmlMappingOnlyExamples() throws CatException, CarException {
+    private static void xmlMappingOnlyExamples() {
         catsExample();
         carExample();
         engineExample();
@@ -227,7 +225,7 @@ public class Main {
         }
     }
 
-    private static void carExample() throws CarException {
+    private static void carExample() {
         //Примеры по CRUD all операций через объект CarDao (на связке из Car и Engine)
         //Car и Engine one-to-one (отображение через car.hbn.xml и engine.hbn.xml)
         CarDao carDao = CarDaoJpaImpl.getInstance();
@@ -269,7 +267,7 @@ public class Main {
         System.out.println("Результат удаления обьекта в базе " + carDao.remove(carFromDbToRemove));// будет true
     }
 
-    private static void catsExample() throws CatException {
+    private static void catsExample() {
         // Пример простого одиночного bean Cat (отображение через cat.hbn.xml)
         CatDao catDao = CatDaoJpaImpl.getInstance();
 
@@ -296,5 +294,21 @@ public class Main {
 
         Cat pumba = catDao.get("пумба");//Пример по доставанию Cat по имени
         System.out.println("Котик по имени пумба " + pumba);
+    }
+
+    private static void namedQueriesExample() {
+        //метод getByNamedQueryStringArgument (который работает на именованных запросах)
+        WarriorDao warriorDao = WarriorDaoJpaImpl.getInstance();
+        WeaponDao weaponDao = WeaponDaoJpaImpl.getInstance();
+        MilitaryFormationDao militaryFormationDao= MilitaryFormationDaoJpaImpl.getInstance();
+
+        //configured Named queries by annotations @NamedQuery
+        System.out.println(warriorDao.get("Науменко"));
+        System.out.println(weaponDao.get("ght0978st"));
+        System.out.println(militaryFormationDao.get("36 Дорожно-мостовая бригада"));
+    }
+
+    private static void criteriaApiExample() {
+
     }
 }
