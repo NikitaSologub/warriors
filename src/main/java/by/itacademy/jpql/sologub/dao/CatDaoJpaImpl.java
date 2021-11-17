@@ -8,7 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class CatDaoJpaImpl extends AbstractDaoJpa<Cat> implements CatDao {
+public class CatDaoJpaImpl extends BaseCrudRepoJpa<Cat> implements CatDao {
     private static CatDao instance;
 
     private CatDaoJpaImpl() {

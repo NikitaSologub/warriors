@@ -4,18 +4,18 @@ import by.itacademy.jpql.sologub.model.MilitaryFormation;
 
 import java.util.List;
 
-public class MilitaryFormationJpaImpl extends AbstractDaoJpa<MilitaryFormation> implements MilitaryFormationDao {
-    private static MilitaryFormationJpaImpl instance;
+public class MilitaryFormationDaoJpaImpl extends BaseCrudRepoJpa<MilitaryFormation> implements MilitaryFormationDao {
+    private static MilitaryFormationDaoJpaImpl instance;
 
-    protected MilitaryFormationJpaImpl() {
+    protected MilitaryFormationDaoJpaImpl() {
         super(MilitaryFormation.class);
     }
 
-    public static MilitaryFormationJpaImpl getInstance() {
+    public static MilitaryFormationDaoJpaImpl getInstance() {
         if (instance == null) {
-            synchronized (MilitaryFormationJpaImpl.class) {
+            synchronized (MilitaryFormationDaoJpaImpl.class) {
                 if (instance == null) {
-                    instance = new MilitaryFormationJpaImpl();
+                    instance = new MilitaryFormationDaoJpaImpl();
                 }
             }
         }

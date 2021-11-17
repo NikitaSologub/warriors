@@ -4,7 +4,7 @@ import by.itacademy.jpql.sologub.model.Warrior;
 
 import java.util.List;
 
-public class WarriorDaoJpaImpl extends AbstractDaoJpa<Warrior> implements WarriorDao {
+public class WarriorDaoJpaImpl extends BaseCrudRepoJpa<Warrior> implements WarriorDao {
     private static WarriorDaoJpaImpl instance;
 
     private WarriorDaoJpaImpl() {

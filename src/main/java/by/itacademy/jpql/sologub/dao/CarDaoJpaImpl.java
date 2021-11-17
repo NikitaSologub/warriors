@@ -8,7 +8,7 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class CarDaoJpaImpl extends AbstractDaoJpa<Car> implements CarDao {
+public class CarDaoJpaImpl extends BaseCrudRepoJpa<Car> implements CarDao {
     private static CarDao instance;
 
     private CarDaoJpaImpl() {

@@ -1,7 +1,6 @@
 package by.itacademy.jpql.sologub.dao;
 
 import by.itacademy.jpql.sologub.model.AbstractEntity;
-import by.itacademy.jpql.sologub.model.Weapon;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -9,10 +8,10 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public abstract class AbstractDaoJpa<T extends AbstractEntity> {
+public abstract class BaseCrudRepoJpa<T extends AbstractEntity> {
     private final Class<T> objClass;
 
-    protected AbstractDaoJpa(Class<T> objClass) {
+    protected BaseCrudRepoJpa(Class<T> objClass) {
         this.objClass = objClass;
     }
 

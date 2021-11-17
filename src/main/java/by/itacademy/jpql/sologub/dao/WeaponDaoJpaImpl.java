@@ -4,7 +4,7 @@ import by.itacademy.jpql.sologub.model.Weapon;
 
 import java.util.List;
 
-public class WeaponDaoJpaImpl extends AbstractDaoJpa<Weapon> implements WeaponDao{
+public class WeaponDaoJpaImpl extends BaseCrudRepoJpa<Weapon> implements WeaponDao{
     private static WeaponDaoJpaImpl instance;
 
     private WeaponDaoJpaImpl() {
