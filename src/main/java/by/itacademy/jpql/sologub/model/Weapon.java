@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.With;
 
+import javax.persistence.NamedQuery;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,6 +23,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
+@NamedQuery(name = "getBySerialNumber", query = "select w from Weapon w where serialNumber=?1")
 @Entity
 @Table(name = "weapon")
 public class Weapon extends AbstractEntity {

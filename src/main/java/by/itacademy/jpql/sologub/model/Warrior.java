@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Data
 @With
+@NamedQuery(name = "getByLastname", query = "SELECT w FROM Warrior w WHERE w.info.lastname=?1")
 @Entity
 @Table(name = "warrior")
 public class Warrior extends AbstractEntity {

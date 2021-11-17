@@ -1,6 +1,7 @@
 package by.itacademy.jpql.sologub.dao;
 
 import by.itacademy.jpql.sologub.model.AbstractEntity;
+import by.itacademy.jpql.sologub.model.Weapon;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -32,6 +33,28 @@ public abstract class AbstractDaoJpa<T extends AbstractEntity> {
             transaction.commit();
         } catch (PersistenceException e) {
 //            System.err.println("Не удалось достать" + objClass.getSimpleName() + " из бд по id=" + id);
+            throw e;
+        } finally {
+            manager.close();
+        }
+        return result;
+    }
+
+    protected T getByNamedQueryStringArgument(String queryName, String arg) {
+        T result = null;
+        EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            transaction.begin();
+            @SuppressWarnings("JpaQlInspection")
+            TypedQuery<T> typedQuery = manager
+                    .createNamedQuery(queryName, objClass)
+                    .setParameter(1, arg);
+            result = typedQuery.getSingleResult();
+//            System.err.println("Достали обьект из бд" + result);
+            transaction.commit();
+        } catch (PersistenceException e) {
+//            System.err.println("Не удалось достать информацию по запросу");
             throw e;
         } finally {
             manager.close();
