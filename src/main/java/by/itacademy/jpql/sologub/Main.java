@@ -21,12 +21,18 @@ import by.itacademy.jpql.sologub.model.WarriorInfo;
 import by.itacademy.jpql.sologub.model.Weapon;
 import by.itacademy.jpql.sologub.model.WeaponManufacturer;
 import by.itacademy.jpql.sologub.model.WeaponType;
+import org.hibernate.Criteria;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,10 +40,11 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
+        //Лучше раскоментировать и вызывать по одному (а еще лучше по одному вспомагательному методу)
 //        xmlMappingOnlyExamples();
 //        xmlAndAnnotationMappingExamples();
 //        namedQueriesExample();
-        criteriaApiExample();
+//        criteriaApiExample();
     }
 
     public static void xmlAndAnnotationMappingExamples() {
@@ -156,7 +163,7 @@ public class Main {
         System.out.println(formationDao.get("Произвольная группа для удаления"));// null expected
     }
 
-    private static void groupsChanging(){
+    private static void groupsChanging() {
         //Большое тело - вынес отдельно в метод
         MilitaryFormationDao formationDao = MilitaryFormationDaoJpaImpl.getInstance();
 
@@ -300,7 +307,7 @@ public class Main {
         //метод getByNamedQueryStringArgument (который работает на именованных запросах)
         WarriorDao warriorDao = WarriorDaoJpaImpl.getInstance();
         WeaponDao weaponDao = WeaponDaoJpaImpl.getInstance();
-        MilitaryFormationDao militaryFormationDao= MilitaryFormationDaoJpaImpl.getInstance();
+        MilitaryFormationDao militaryFormationDao = MilitaryFormationDaoJpaImpl.getInstance();
 
         //configured Named queries by annotations @NamedQuery
         System.out.println(warriorDao.get("Науменко"));
@@ -309,6 +316,28 @@ public class Main {
     }
 
     private static void criteriaApiExample() {
+        criteriaGetAll();
+        criteriaGetByParameter();
+    }
 
+    public static void criteriaGetAll() {
+        EntityManager manager = EntityManagerHelper.getInstance().getEntityManager();
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Car> criteriaQuery = builder.createQuery(Car.class);
+        Root<Car> root = criteriaQuery.from(Car.class);
+        criteriaQuery.select(root);
+
+        TypedQuery<Car> query = manager.createQuery(criteriaQuery);
+        List<Car> cars = query.getResultList();
+        System.out.println(cars);
+    }
+
+    public static void criteriaGetByParameter() { //serialNumber    "sTR670_120dy11"
+        Session manager = (Session) EntityManagerHelper.getInstance().getEntityManager();
+        Criteria criteria = manager
+                .createCriteria(Weapon.class)
+                .add(Restrictions.eq("serialNumber", "sTR670_120dy11"));
+        List<Weapon> users = criteria.list();
+        System.out.println(users.stream().findAny().get());
     }
 }
