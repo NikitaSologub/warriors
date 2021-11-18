@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/edu</property>
+        <property name="connection.username">wombat</property>
+        <property name="connection.password">wombat</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">none</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="connection.pool_size">2</property>
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+        <property name="hibernate.c3p0.max_size">10</property>
+        <property name="hibernate.c3p0.min_size">2</property>
+        <property name="hibernate.c3p0.max_statements">100</property>
+
+        <mapping resource="cat.hbm.xml"/>
+        <mapping resource="car.hbm.xml"/>
+        <mapping resource="engine.hbm.xml"/>
+
+        <mapping class="by.itacademy.jpql.sologub.model.MilitaryRank"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WeaponManufacturer"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WeaponType"/>
+        <mapping class="by.itacademy.jpql.sologub.model.MilitaryFormation"/>
+        <mapping class="by.itacademy.jpql.sologub.model.Weapon"/>
+        <mapping class="by.itacademy.jpql.sologub.model.Warrior"/>
+        <mapping class="by.itacademy.jpql.sologub.model.WarriorInfo"/>
+    </session-factory>
+</hibernate-configuration>
